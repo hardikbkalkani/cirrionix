@@ -84,7 +84,7 @@ const config: Config = {
           "50%":      { opacity: "1" },
         },
       },
-      typography: ({ theme }) => ({
+      typography: ({ theme }: { theme: (path: string) => string }) => ({
         cirrionix: {
           css: {
             "--tw-prose-body":        theme("colors.gray.700"),
