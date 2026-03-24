@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Syne, DM_Sans, JetBrains_Mono } from "next/font/google";
+import { SiteFooter } from "@/components/site-footer";
+import { SiteHeader } from "@/components/site-header";
 import "./globals.css";
 
 const syne = Syne({
@@ -25,11 +27,11 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Cirrionix — Travel Beyond the Ordinary",
+    default: "Cirrionix | Travel Beyond the Ordinary",
     template: "%s | Cirrionix",
   },
   description:
-    "India's smartest travel guide for digital nomads, visa guides, and the Indian passport holder exploring the world. Real numbers, zero fluff.",
+    "India's smartest travel guide for digital nomads, visa guides, and Indian travelers exploring the world with clarity.",
   keywords: [
     "travel blog india",
     "digital nomad india",
@@ -46,23 +48,14 @@ export const metadata: Metadata = {
     locale: "en_IN",
     url: "https://cirrionix.in",
     siteName: "Cirrionix",
-    title: "Cirrionix — Travel Beyond the Ordinary",
+    title: "Cirrionix | Travel Beyond the Ordinary",
     description:
-      "India's smartest travel guide for digital nomads, visa guides, and the Indian passport holder exploring the world.",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Cirrionix — Travel Beyond the Ordinary",
-      },
-    ],
+      "Premium travel intelligence for Indian travelers navigating visas, slow travel, and long stays.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Cirrionix — Travel Beyond the Ordinary",
+    title: "Cirrionix | Travel Beyond the Ordinary",
     description: "India's smartest travel guide. Real numbers, zero fluff.",
-    images: ["/og-image.png"],
     creator: "@cirrionix",
   },
   robots: {
@@ -70,24 +63,25 @@ export const metadata: Metadata = {
     follow: true,
     googleBot: { index: true, follow: true, "max-image-preview": "large" },
   },
-  icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon-16x16.png",
-    apple: "/apple-touch-icon.png",
-  },
 };
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
     <html
       lang="en"
       className={`${syne.variable} ${dmSans.variable} ${jetbrainsMono.variable}`}
     >
-      <body className="bg-brand-cloud antialiased">{children}</body>
+      <body className="bg-brand-space font-body antialiased">
+        <div className="min-h-screen bg-brand-space text-white">
+          <SiteHeader />
+          {children}
+          <SiteFooter />
+        </div>
+      </body>
     </html>
   );
 }

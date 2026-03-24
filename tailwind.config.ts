@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import typography from "@tailwindcss/typography";
 
 const config: Config = {
   content: [
@@ -83,7 +84,7 @@ const config: Config = {
           "50%":      { opacity: "1" },
         },
       },
-      typography: (theme: (path: string) => string) => ({
+      typography: ({ theme }) => ({
         cirrionix: {
           css: {
             "--tw-prose-body":        theme("colors.gray.700"),
@@ -102,9 +103,7 @@ const config: Config = {
       }),
     },
   },
-  plugins: [
-    require("@tailwindcss/typography"),
-  ],
+  plugins: [typography],
 };
 
 export default config;
