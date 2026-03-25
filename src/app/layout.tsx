@@ -75,8 +75,8 @@ export default function RootLayout({
       lang="en"
       className={`${syne.variable} ${dmSans.variable} ${jetbrainsMono.variable}`}
     >
-      <body className="bg-brand-space font-body antialiased">
-        <div className="min-h-screen bg-brand-space text-white">
+      <body className="bg-brand-cloud font-body antialiased">
+        <div className="min-h-screen bg-brand-cloud text-brand-space">
           <SiteHeader />
           {children}
           <SiteFooter />

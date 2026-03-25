@@ -11,6 +11,7 @@
   --color-teal-light: #9fe1cb;
   --color-amber: #ef9f27;
   --color-cloud: #f1efe8;
+  --color-mist: #fbfaf7;
   --max-width: 1280px;
   --nav-height: 72px;
 }
@@ -28,8 +29,10 @@ html {
 
 body {
   margin: 0;
-  background: var(--color-space);
-  color: white;
+  background:
+    radial-gradient(circle at top left, rgba(93, 202, 165, 0.12), transparent 26%),
+    linear-gradient(180deg, #fbfaf7 0%, #f3f0e8 100%);
+  color: var(--color-space);
   font-family: var(--font-dm-sans), system-ui, sans-serif;
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
@@ -64,7 +67,7 @@ img {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(93, 202, 165, 0.38);
+  background: rgba(93, 202, 165, 0.5);
   border-radius: 999px;
 }
 
@@ -95,9 +98,9 @@ img {
 .hero-glow {
   pointer-events: none;
   background:
-    radial-gradient(circle at 15% 15%, rgba(122, 230, 192, 0.12), transparent 22%),
-    radial-gradient(circle at 80% 10%, rgba(93, 202, 165, 0.08), transparent 25%),
-    linear-gradient(180deg, rgba(8, 12, 22, 0) 0%, rgba(8, 12, 22, 0.5) 100%);
+    radial-gradient(circle at 15% 15%, rgba(122, 230, 192, 0.24), transparent 24%),
+    radial-gradient(circle at 80% 10%, rgba(239, 159, 39, 0.12), transparent 28%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(241, 239, 232, 0.72) 100%);
 }
 
 .gradient-text {
@@ -108,14 +111,15 @@ img {
 }
 
 .glow-text {
-  text-shadow: 0 0 24px rgba(122, 230, 192, 0.25);
+  text-shadow: 0 10px 30px rgba(93, 202, 165, 0.18);
 }
 
 .pill-eyebrow {
   display: inline-flex;
   align-items: center;
   border-radius: 999px;
-  background: rgba(122, 230, 192, 0.08);
+  border: 1px solid rgba(93, 202, 165, 0.2);
+  background: rgba(255, 255, 255, 0.72);
   padding: 0.55rem 0.9rem;
   font-size: 0.68rem;
   font-weight: 700;
@@ -144,7 +148,7 @@ img {
 .button-primary {
   background: linear-gradient(135deg, #7ae6c0 0%, #5dcaa5 100%);
   color: #002117;
-  box-shadow: 0 0 30px rgba(93, 202, 165, 0.18);
+  box-shadow: 0 18px 40px rgba(93, 202, 165, 0.22);
 }
 
 .button-primary:hover {
@@ -152,13 +156,13 @@ img {
 }
 
 .button-ghost {
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.03);
-  color: white;
+  border: 1px solid rgba(11, 15, 26, 0.1);
+  background: rgba(255, 255, 255, 0.75);
+  color: var(--color-space);
 }
 
 .button-ghost:hover {
-  border-color: rgba(122, 230, 192, 0.4);
+  border-color: rgba(93, 202, 165, 0.5);
   color: var(--color-teal);
 }
 

@@ -19,9 +19,9 @@ export function NewsletterForm({ dark = true }: NewsletterFormProps) {
 
   if (submitted) {
     return (
-      <div className="rounded-[28px] border border-brand-teal/20 bg-brand-teal/10 px-6 py-5 text-left text-brand-teal">
-        <p className="font-sans text-2xl font-extrabold text-white">Welcome aboard.</p>
-        <p className="mt-2 text-sm leading-6 text-white/65">
+      <div className="rounded-[28px] border border-brand-teal/25 bg-white/85 px-6 py-5 text-left text-brand-teal shadow-[0_16px_32px_rgba(93,202,165,0.12)]">
+        <p className="font-sans text-2xl font-extrabold text-brand-space">Welcome aboard.</p>
+        <p className="mt-2 text-sm leading-6 text-brand-space/65">
           Your next edition of the Travel Brief will be waiting in your inbox.
         </p>
       </div>
