@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { PortableText } from "@portabletext/react";
 import { NewsletterForm } from "@/components/newsletter-form";
 import {
   Article,
@@ -24,6 +25,40 @@ function accentClasses(accent: string) {
       return "bg-brand-teal/15 text-brand-teal-dark";
   }
 }
+
+const portableTextComponents = {
+  block: {
+    normal: ({ children }: { children?: React.ReactNode }) => (
+      <p>{children}</p>
+    ),
+    h2: ({ children }: { children?: React.ReactNode }) => (
+      <h2>{children}</h2>
+    ),
+    h3: ({ children }: { children?: React.ReactNode }) => (
+      <h3>{children}</h3>
+    ),
+    blockquote: ({ children }: { children?: React.ReactNode }) => (
+      <blockquote>{children}</blockquote>
+    ),
+  },
+  marks: {
+    link: ({
+      children,
+      value,
+    }: {
+      children?: React.ReactNode;
+      value?: { href?: string };
+    }) => (
+      <a
+        href={value?.href || "#"}
+        target="_blank"
+        rel="noreferrer"
+      >
+        {children}
+      </a>
+    ),
+  },
+};
 
 export function HomeHero() {
   return (
@@ -421,14 +456,21 @@ export function ArticleBody({
       <div className="container-site grid gap-10 xl:grid-cols-[minmax(0,1fr),320px]">
         <article className="rounded-[34px] border border-brand-space/6 bg-white/85 px-7 py-10 shadow-[0_24px_70px_rgba(15,23,42,0.08)] md:px-12 md:py-14">
           <div className="prose-cirrionix mx-auto max-w-3xl">
-            {article.sections.map((section) => (
-              <section key={section.heading} className="mt-12 first:mt-0">
-                <h2>{section.heading}</h2>
-                {section.body.map((paragraph) => (
-                  <p key={paragraph}>{paragraph}</p>
-                ))}
-              </section>
-            ))}
+            {article.body?.length ? (
+              <PortableText
+                value={article.body}
+                components={portableTextComponents}
+              />
+            ) : (
+              article.sections.map((section) => (
+                <section key={section.heading} className="mt-12 first:mt-0">
+                  <h2>{section.heading}</h2>
+                  {section.body.map((paragraph) => (
+                    <p key={paragraph}>{paragraph}</p>
+                  ))}
+                </section>
+              ))
+            )}
           </div>
         </article>
 

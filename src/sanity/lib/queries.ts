@@ -2,7 +2,7 @@ import {defineQuery} from "next-sanity";
 
 const ARTICLE_PROJECTION = `
   "slug": slug.current,
-  "category": coalesce(category->title, "Journal"),
+  "category": coalesce(categories[0]->title, category->title, "Journal"),
   title,
   excerpt,
   readingTime,
@@ -10,6 +10,7 @@ const ARTICLE_PROJECTION = `
   "role": coalesce(author->role, "Editorial Team"),
   publishedAt,
   "accent": coalesce(accent, "teal"),
+  body,
   sections[]{
     heading,
     body
@@ -31,4 +32,3 @@ export const ARTICLE_BY_SLUG_QUERY = defineQuery(`
 export const ARTICLE_SLUGS_QUERY = defineQuery(`
   *[_type == "post" && defined(slug.current)].slug.current
 `);
-

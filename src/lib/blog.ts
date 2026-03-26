@@ -1,3 +1,4 @@
+import type { PortableTextBlock } from "sanity";
 import {Article, articles as fallbackArticles} from "@/lib/site-data";
 import {client} from "@/sanity/lib/client";
 import {
@@ -10,6 +11,69 @@ import {isSanityConfigured} from "@/sanity/env";
 type SanityArticle = Omit<Article, "publishedAt"> & {
   publishedAt?: string;
 };
+
+function getPortableTextParagraphs(blocks: PortableTextBlock[] = []) {
+  return blocks
+    .filter((block) => block._type === "block")
+    .map((block) => {
+      const children = Array.isArray(block.children) ? block.children : [];
+
+      return children
+        .map((child) =>
+          typeof child === "object" &&
+          child !== null &&
+          "text" in child &&
+          typeof child.text === "string"
+            ? child.text
+            : "",
+        )
+        .join("")
+        .trim();
+    })
+    .filter(Boolean);
+}
+
+function buildExcerpt(article: SanityArticle) {
+  if (article.excerpt?.trim()) {
+    return article.excerpt;
+  }
+
+  const sectionExcerpt = article.sections?.flatMap((section) => section.body)?.[0];
+
+  if (sectionExcerpt) {
+    return sectionExcerpt;
+  }
+
+  const portableText = getPortableTextParagraphs(article.body);
+  const firstParagraph = portableText[0];
+
+  if (!firstParagraph) {
+    return "";
+  }
+
+  return firstParagraph.length > 180
+    ? `${firstParagraph.slice(0, 177).trimEnd()}...`
+    : firstParagraph;
+}
+
+function buildReadingTime(article: SanityArticle) {
+  if (article.readingTime?.trim()) {
+    return article.readingTime;
+  }
+
+  const text = [
+    ...getPortableTextParagraphs(article.body),
+    ...(article.sections?.flatMap((section) => section.body) || []),
+  ].join(" ");
+
+  const words = text.trim().split(/\s+/).filter(Boolean).length;
+
+  if (!words) {
+    return "5 min read";
+  }
+
+  return `${Math.max(1, Math.ceil(words / 200))} min read`;
+}
 
 function formatPublishedAt(value?: string) {
   if (!value) {
@@ -33,12 +97,13 @@ function normalizeArticle(article: SanityArticle): Article {
   return {
     ...article,
     category: article.category || "Journal",
-    excerpt: article.excerpt || "",
-    readingTime: article.readingTime || "5 min read",
+    excerpt: buildExcerpt(article),
+    readingTime: buildReadingTime(article),
     author: article.author || "Cirrionix",
     role: article.role || "Editorial Team",
     publishedAt: formatPublishedAt(article.publishedAt),
     accent: article.accent || "teal",
+    body: article.body || [],
     sections: article.sections || [],
   };
 }
@@ -92,4 +157,3 @@ export async function getBlogSlugs() {
     return fallbackArticles.map((article) => article.slug);
   }
 }
-

@@ -1,3 +1,5 @@
+import type { PortableTextBlock } from "sanity";
+
 export type NavItem = {
   href: string;
   label: string;
@@ -42,6 +44,7 @@ export type Article = {
   role: string;
   publishedAt: string;
   accent: string;
+  body?: PortableTextBlock[];
   sections: Array<{
     heading: string;
     body: string[];
