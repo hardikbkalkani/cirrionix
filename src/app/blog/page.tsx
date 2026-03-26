@@ -1,10 +1,13 @@
 import { ArticleGrid, BlogListingHero, NewsletterCta } from "@/components/sections";
+import { getBlogArticles } from "@/lib/blog";
 
-export default function BlogPage() {
+export default async function BlogPage() {
+  const articles = await getBlogArticles();
+
   return (
     <main>
       <BlogListingHero />
-      <ArticleGrid />
+      <ArticleGrid items={articles} />
       <NewsletterCta />
     </main>
   );

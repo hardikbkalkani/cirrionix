@@ -6,7 +6,6 @@ import {
   ServiceCard,
   VisaStat,
   VisaTrend,
-  articles,
   homeStats,
   serviceCards,
 } from "@/lib/site-data";
@@ -309,7 +308,28 @@ export function BlogListingHero() {
   );
 }
 
-export function ArticleGrid({ items = articles }: { items?: Article[] }) {
+export function ArticleGrid({ items }: { items: Article[] }) {
+  if (!items.length) {
+    return (
+      <section className="bg-transparent pb-24">
+        <div className="container-site">
+          <div className="rounded-[34px] border border-brand-space/6 bg-white/85 p-8 text-brand-space shadow-[0_24px_70px_rgba(15,23,42,0.08)]">
+            <p className="text-label-sm uppercase tracking-[0.18em] text-brand-teal-dark">
+              Journal
+            </p>
+            <h2 className="mt-4 text-3xl font-extrabold tracking-[-0.04em]">
+              Posts are on the way.
+            </h2>
+            <p className="mt-4 max-w-2xl text-base leading-8 text-brand-space/62">
+              Connect your Sanity project or publish the first article to see the
+              journal populate here.
+            </p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   const [featured, ...rest] = items;
 
   return (
@@ -388,8 +408,13 @@ export function ArticleHero({ article }: { article: Article }) {
   );
 }
 
-export function ArticleBody({ article }: { article: Article }) {
-  const related = articles.filter((entry) => entry.slug !== article.slug).slice(0, 2);
+export function ArticleBody({
+  article,
+  related = [],
+}: {
+  article: Article;
+  related?: Article[];
+}) {
 
   return (
     <section className="bg-transparent pb-24">
@@ -421,14 +446,20 @@ export function ArticleBody({ article }: { article: Article }) {
 
           <div className="rounded-[30px] border border-brand-space/6 bg-white/80 p-6 text-brand-space shadow-[0_16px_40px_rgba(15,23,42,0.06)]">
             <p className="text-label-sm uppercase tracking-[0.18em] text-brand-space/35">Keep exploring</p>
-            <div className="mt-5 space-y-5">
-              {related.map((entry) => (
-                <Link key={entry.slug} href={`/blog/${entry.slug}`} className="block rounded-[22px] border border-brand-space/6 bg-[#fffdf8] p-4 transition-colors hover:bg-brand-cloud">
-                  <p className="text-sm uppercase tracking-[0.18em] text-brand-teal-dark">{entry.category}</p>
-                  <h3 className="mt-2 text-lg font-bold tracking-[-0.03em] text-brand-space">{entry.title}</h3>
-                </Link>
-              ))}
-            </div>
+            {related.length ? (
+              <div className="mt-5 space-y-5">
+                {related.map((entry) => (
+                  <Link key={entry.slug} href={`/blog/${entry.slug}`} className="block rounded-[22px] border border-brand-space/6 bg-[#fffdf8] p-4 transition-colors hover:bg-brand-cloud">
+                    <p className="text-sm uppercase tracking-[0.18em] text-brand-teal-dark">{entry.category}</p>
+                    <h3 className="mt-2 text-lg font-bold tracking-[-0.03em] text-brand-space">{entry.title}</h3>
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <p className="mt-5 text-sm leading-7 text-brand-space/58">
+                Publish a few more articles in Sanity and related reads will show up here automatically.
+              </p>
+            )}
           </div>
         </aside>
       </div>
