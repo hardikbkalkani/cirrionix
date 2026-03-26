@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import { ArticleBody, ArticleHero } from "@/components/sections";
 import { getBlogArticleBySlug, getBlogArticles, getBlogSlugs } from "@/lib/blog";
 
+export const revalidate = 60;
+
 export async function generateStaticParams() {
   const slugs = await getBlogSlugs();
   return slugs.map((slug) => ({ slug }));
