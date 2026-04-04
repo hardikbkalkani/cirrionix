@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint src --ext .ts,.tsx"
+    "lint": "eslint src --ext .ts,.tsx",
+    "ai:post": "node scripts/ai-draft-post.mjs"
   },
   "dependencies": {
     "@sanity/icons": "^3.7.4",

@@ -1,36 +1,56 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
 ## Getting Started
 
-First, run the development server:
+Run the app locally:
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment Variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Create `.env.local` and add:
 
-## Learn More
+```env
+NEXT_PUBLIC_SANITY_PROJECT_ID=your-project-id
+NEXT_PUBLIC_SANITY_DATASET=production
+NEXT_PUBLIC_SANITY_API_VERSION=2025-02-19
+NEXT_PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX
+GEMINI_API_KEY=your-gemini-api-key
+SANITY_API_WRITE_TOKEN=your-sanity-write-token
+AI_AUTOBLOG_TEXT_MODEL=gemini-2.5-flash
+AI_AUTOBLOG_IMAGE_MODEL=gemini-2.5-flash-image
+AI_AUTOBLOG_MODE=draft
+AI_AUTOBLOG_ALLOW_TEXT_ONLY=true
+AI_AUTOBLOG_AUTHOR_NAME=Cirrionix AI Desk
+AI_AUTOBLOG_AUTHOR_SLUG=cirrionix-ai-desk
+AI_AUTOBLOG_DEFAULT_CATEGORY=Visa Guide
+CRON_SECRET=change-this-secret
+```
 
-To learn more about Next.js, take a look at the following resources:
+## AI Blog Automation
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Generate a draft post manually:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm run ai:post -- --topic="Thailand visa guide for Indians in 2026" --category="Visa Guide"
+```
 
-## Deploy on Vercel
+The script will:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- generate a structured article with Gemini
+- generate a copyright-safe AI image with Gemini when image quota is available
+- upload the image to Sanity
+- create a Sanity `post` document as a draft by default
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+If your free Gemini project has no image quota, set `AI_AUTOBLOG_ALLOW_TEXT_ONLY=true` and the script will still create a draft post without a hero image.
+
+You can trigger the same workflow through the protected API route:
+
+```bash
+curl -H "Authorization: Bearer YOUR_CRON_SECRET" http://localhost:3000/api/automation/ai-post
+```
+
+`vercel.json` includes a daily cron schedule for `05:00 UTC`. On Vercel, set `CRON_SECRET` in your project settings so scheduled invocations automatically include the matching `Authorization` header.
