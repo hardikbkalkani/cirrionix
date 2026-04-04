@@ -20,6 +20,7 @@ NEXT_PUBLIC_SANITY_API_VERSION=2025-02-19
 NEXT_PUBLIC_GA_MEASUREMENT_ID=G-XXXXXXXXXX
 GEMINI_API_KEY=your-gemini-api-key
 SANITY_API_WRITE_TOKEN=your-sanity-write-token
+UNSPLASH_ACCESS_KEY=your-unsplash-access-key
 AI_AUTOBLOG_TEXT_MODEL=gemini-2.5-flash
 AI_AUTOBLOG_IMAGE_MODEL=gemini-2.5-flash-image
 AI_AUTOBLOG_MODE=draft
@@ -41,11 +42,12 @@ npm run ai:post -- --topic="Thailand visa guide for Indians in 2026" --category=
 The script will:
 
 - generate a structured article with Gemini
-- generate a copyright-safe AI image with Gemini when image quota is available
+- fetch a copyright-safe cover image from Unsplash when `UNSPLASH_ACCESS_KEY` is present
+- otherwise generate a copyright-safe AI image with Gemini when image quota is available
 - upload the image to Sanity
 - create a Sanity `post` document as a draft by default
 
-If your free Gemini project has no image quota, set `AI_AUTOBLOG_ALLOW_TEXT_ONLY=true` and the script will still create a draft post without a hero image.
+If Unsplash is not configured and your free Gemini project has no image quota, set `AI_AUTOBLOG_ALLOW_TEXT_ONLY=true` and the script will still create a draft post without a hero image.
 
 You can trigger the same workflow through the protected API route:
 

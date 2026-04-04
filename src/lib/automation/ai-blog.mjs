@@ -47,6 +47,48 @@ function isQuotaError(error) {
   );
 }
 
+function getUnsplashQueryFallback(topic, category) {
+  const topicLower = (topic || "").toLowerCase();
+  const destinations = [
+    "thailand",
+    "bali",
+    "dubai",
+    "japan",
+    "singapore",
+    "malaysia",
+    "georgia",
+    "kenya",
+    "maldives",
+    "vietnam",
+    "portugal",
+    "lisbon",
+    "chiang mai",
+    "tbilisi",
+    "medellin",
+    "sri lanka",
+    "paris",
+    "tokyo",
+    "indonesia",
+    "kerala",
+    "goa",
+  ];
+  const destination = destinations.find((entry) => topicLower.includes(entry));
+
+  if (destination) {
+    return `${destination} travel landscape`;
+  }
+
+  const categoryMap = {
+    "visa guide": "passport travel airport",
+    "digital nomad": "remote work travel laptop cafe",
+    "travel insurance": "travel documents passport airport",
+    "wellness travel": "wellness retreat nature luxury",
+    destinations: "travel landscape scenic",
+  };
+
+  return categoryMap[(category || "").toLowerCase()] || "travel landscape scenic";
+}
+
 function estimateReadingTime(sections) {
   const text = sections.flatMap((section) => section.paragraphs).join(" ");
   const words = text.split(/\s+/).filter(Boolean).length;
@@ -156,6 +198,7 @@ async function generateArticle(topic, category) {
           slug: {type: "STRING"},
           excerpt: {type: "STRING"},
           categoryName: {type: "STRING"},
+          unsplashQuery: {type: "STRING"},
           imageAlt: {type: "STRING"},
           imagePrompt: {type: "STRING"},
           sections: {
@@ -179,6 +222,7 @@ async function generateArticle(topic, category) {
           "slug",
           "excerpt",
           "categoryName",
+          "unsplashQuery",
           "imageAlt",
           "imagePrompt",
           "sections",
@@ -188,6 +232,7 @@ async function generateArticle(topic, category) {
           "slug",
           "excerpt",
           "categoryName",
+          "unsplashQuery",
           "imageAlt",
           "imagePrompt",
           "sections",
@@ -205,7 +250,55 @@ async function generateArticle(topic, category) {
   const article = JSON.parse(raw);
   article.slug = slugify(article.slug || article.title);
   article.categoryName = article.categoryName || chosenCategory;
+  article.unsplashQuery =
+    article.unsplashQuery || getUnsplashQueryFallback(promptTopic, chosenCategory);
   return article;
+}
+
+async function fetchUnsplashImage(article) {
+  const accessKey = process.env.UNSPLASH_ACCESS_KEY;
+
+  if (!accessKey) {
+    return null;
+  }
+
+  const query =
+    article.unsplashQuery ||
+    getUnsplashQueryFallback(article.title, article.categoryName);
+
+  const response = await fetch(
+    `https://api.unsplash.com/search/photos?query=${encodeURIComponent(query)}&per_page=1&orientation=landscape&content_filter=high`,
+    {
+      headers: {
+        Authorization: `Client-ID ${accessKey}`,
+      },
+    },
+  );
+
+  if (!response.ok) {
+    throw new Error(`Unsplash request failed (${response.status})`);
+  }
+
+  const payload = await response.json();
+  const photo = payload.results?.[0];
+
+  if (!photo?.urls?.regular) {
+    return null;
+  }
+
+  const imageResponse = await fetch(photo.urls.regular);
+
+  if (!imageResponse.ok) {
+    throw new Error(`Unsplash image download failed (${imageResponse.status})`);
+  }
+
+  const arrayBuffer = await imageResponse.arrayBuffer();
+
+  return {
+    alt: photo.alt_description || article.imageAlt || query,
+    buffer: Buffer.from(arrayBuffer),
+    extension: "jpg",
+  };
 }
 
 async function generateImage(article) {
@@ -337,6 +430,7 @@ async function ensureCategory(categoryName) {
 async function createPostDocument(
   article,
   imageAssetId,
+  imageAlt,
   authorId,
   categoryId,
   mode,
@@ -377,7 +471,7 @@ async function createPostDocument(
                   _type: "reference",
                   _ref: imageAssetId,
                 },
-                alt: article.imageAlt,
+                alt: imageAlt,
               },
             }
           : {}),
@@ -403,10 +497,21 @@ export async function createAutomatedBlogDraft(options = {}) {
 
   const article = await generateArticle(options.topic, options.category);
   let imageAssetId = null;
+  let imageAlt = article.imageAlt;
 
   try {
-    const imageBuffer = await generateImage(article);
-    imageAssetId = await uploadSanityImage(imageBuffer, `${article.slug}.png`);
+    const unsplashImage = await fetchUnsplashImage(article);
+
+    if (unsplashImage) {
+      imageAlt = unsplashImage.alt || imageAlt;
+      imageAssetId = await uploadSanityImage(
+        unsplashImage.buffer,
+        `${article.slug}.${unsplashImage.extension}`,
+      );
+    } else {
+      const imageBuffer = await generateImage(article);
+      imageAssetId = await uploadSanityImage(imageBuffer, `${article.slug}.png`);
+    }
   } catch (error) {
     if (!allowTextOnly && !isQuotaError(error)) {
       throw error;
@@ -424,6 +529,7 @@ export async function createAutomatedBlogDraft(options = {}) {
   const post = await createPostDocument(
     article,
     imageAssetId,
+    imageAlt,
     authorId,
     categoryId,
     mode,
@@ -434,6 +540,7 @@ export async function createAutomatedBlogDraft(options = {}) {
     title: article.title,
     slug: article.slug,
     category: article.categoryName,
+    imageAlt,
     hasImage: Boolean(imageAssetId),
     documentId: post.documentId,
     readingTime: post.readingTime,
