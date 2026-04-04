@@ -89,6 +89,59 @@ function getUnsplashQueryFallback(topic, category) {
   return categoryMap[(category || "").toLowerCase()] || "travel landscape scenic";
 }
 
+function countLetters(value) {
+  return (value.match(/[a-z]/gi) || []).length;
+}
+
+function hasTooManyRepeatedCharacters(value) {
+  return /(.)\1{5,}/i.test(value);
+}
+
+function validateArticle(article) {
+  if (!article || typeof article !== "object") {
+    throw new Error("Automation produced an invalid article payload.");
+  }
+
+  if (!article.title || countLetters(article.title) < 12) {
+    throw new Error("Automation generated an invalid title.");
+  }
+
+  if (hasTooManyRepeatedCharacters(article.title)) {
+    throw new Error("Automation generated a low-quality repeated-character title.");
+  }
+
+  if (!article.excerpt || countLetters(article.excerpt) < 40) {
+    throw new Error("Automation generated an invalid excerpt.");
+  }
+
+  if (hasTooManyRepeatedCharacters(article.excerpt)) {
+    throw new Error("Automation generated a low-quality repeated-character excerpt.");
+  }
+
+  if (!Array.isArray(article.sections) || article.sections.length < 3) {
+    throw new Error("Automation generated too few content sections.");
+  }
+
+  const paragraphCount = article.sections.reduce(
+    (total, section) => total + (section.paragraphs?.length || 0),
+    0,
+  );
+
+  if (paragraphCount < 6) {
+    throw new Error("Automation generated too little body content.");
+  }
+
+  for (const section of article.sections) {
+    if (!section.heading || countLetters(section.heading) < 6) {
+      throw new Error("Automation generated an invalid section heading.");
+    }
+
+    if (!Array.isArray(section.paragraphs) || !section.paragraphs.length) {
+      throw new Error("Automation generated an empty section.");
+    }
+  }
+}
+
 function estimateReadingTime(sections) {
   const text = sections.flatMap((section) => section.paragraphs).join(" ");
   const words = text.split(/\s+/).filter(Boolean).length;
@@ -252,6 +305,7 @@ async function generateArticle(topic, category) {
   article.categoryName = article.categoryName || chosenCategory;
   article.unsplashQuery =
     article.unsplashQuery || getUnsplashQueryFallback(promptTopic, chosenCategory);
+  validateArticle(article);
   return article;
 }
 
