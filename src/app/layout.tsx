@@ -1,22 +1,15 @@
 import type { Metadata } from "next";
-import { Syne, DM_Sans, JetBrains_Mono } from "next/font/google";
+import { Source_Serif_4, JetBrains_Mono } from "next/font/google";
 import Script from "next/script";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
 import "./globals.css";
 
-const syne = Syne({
+const sourceSerif = Source_Serif_4({
   subsets: ["latin"],
-  variable: "--font-syne",
+  variable: "--font-editorial",
   display: "swap",
-  weight: ["400", "500", "600", "700", "800"],
-});
-
-const dmSans = DM_Sans({
-  subsets: ["latin"],
-  variable: "--font-dm-sans",
-  display: "swap",
-  weight: ["300", "400", "500", "600"],
+  weight: ["400", "500", "600", "700"],
 });
 
 const jetbrainsMono = JetBrains_Mono({
@@ -76,7 +69,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${syne.variable} ${dmSans.variable} ${jetbrainsMono.variable}`}
+      className={`${sourceSerif.variable} ${jetbrainsMono.variable}`}
     >
       <body className="bg-brand-cloud font-body antialiased">
         {GA_MEASUREMENT_ID ? (

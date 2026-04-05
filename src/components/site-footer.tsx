@@ -5,7 +5,7 @@ export function SiteFooter() {
   return (
     <footer className="border-t border-brand-space/8 bg-[#f7f4ec] py-16 text-brand-space/70">
       <div className="container-site">
-        <div className="grid gap-12 md:grid-cols-[1.2fr,1fr,1fr,1fr]">
+        <div className="grid gap-12 md:grid-cols-[1.35fr,1fr,1fr,1fr]">
           <div id="about" className="space-y-5">
             <p className="font-sans text-xl font-extrabold tracking-tight text-brand-space">
               CIRRI<span className="text-brand-teal">ON</span>IX
@@ -13,6 +13,14 @@ export function SiteFooter() {
             <p className="max-w-sm text-sm leading-7 text-brand-space/55">
               Celestial navigation for the modern Indian traveler. We turn travel complexity into clear, premium guidance.
             </p>
+            <div className="rounded-[24px] border border-brand-space/8 bg-white/70 px-4 py-4">
+              <p className="text-label-sm uppercase tracking-[0.18em] text-brand-teal-dark">
+                Current Build
+              </p>
+              <p className="mt-2 text-sm leading-7 text-brand-space/58">
+                The journal and visa guide are live now. Nomad hubs and insurance intelligence are being designed next.
+              </p>
+            </div>
           </div>
 
           {footerColumns.map((column) => (

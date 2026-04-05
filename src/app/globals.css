@@ -33,7 +33,7 @@ body {
     radial-gradient(circle at top left, rgba(93, 202, 165, 0.12), transparent 26%),
     linear-gradient(180deg, #fbfaf7 0%, #f3f0e8 100%);
   color: var(--color-space);
-  font-family: var(--font-dm-sans), system-ui, sans-serif;
+  font-family: var(--font-editorial), Georgia, serif;
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -179,7 +179,7 @@ img {
 .prose-cirrionix h2 {
   margin: 0 0 1rem;
   color: var(--color-space);
-  font-family: var(--font-syne), system-ui, sans-serif;
+  font-family: var(--font-editorial), Georgia, serif;
   font-size: clamp(2rem, 3vw, 2.6rem);
   line-height: 1.05;
   letter-spacing: -0.04em;

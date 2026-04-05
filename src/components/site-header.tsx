@@ -70,7 +70,7 @@ export function SiteHeader() {
 
         <div className="hidden md:block">
           <Link href="/newsletter" className="button-primary text-label-sm">
-            Get Free Guide
+            Join Travel Brief
           </Link>
         </div>
 
@@ -111,7 +111,7 @@ export function SiteHeader() {
               );
             })}
             <Link href="/newsletter" className="button-primary mt-2 text-center text-label-sm">
-              Get Free Guide
+              Join Travel Brief
             </Link>
           </nav>
         </div>

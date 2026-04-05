@@ -57,33 +57,34 @@ export const navItems: NavItem[] = [
   { href: "/", label: "Home" },
   { href: "/visa-guide", label: "Visa Guide" },
   { href: "/blog", label: "Journal" },
-  { href: "/digital-nomad", label: "Digital Nomad" },
-  { href: "/travel-insurance", label: "Insurance" },
+  { href: "/about", label: "About" },
 ];
 
 export const footerColumns = [
   {
-    title: "Company",
+    title: "Live Now",
     links: [
+      { href: "/", label: "Home" },
       { href: "/about", label: "About" },
+      { href: "/visa-guide", label: "Visa Guide" },
       { href: "/blog", label: "Journal" },
       { href: "/newsletter", label: "Travel Brief" },
     ],
   },
   {
-    title: "Guides",
+    title: "Next Routes",
     links: [
-      { href: "/visa-guide", label: "Visa Matrix" },
       { href: "/digital-nomad", label: "Nomad Hubs" },
       { href: "/travel-insurance", label: "Insurance Intel" },
+      { href: "/blog", label: "Wellness Stories" },
     ],
   },
   {
-    title: "Socials",
+    title: "Connect",
     links: [
-      { href: "#", label: "Instagram" },
-      { href: "#", label: "X / Twitter" },
-      { href: "#", label: "LinkedIn" },
+      { href: "/newsletter", label: "Newsletter" },
+      { href: "/privacy-policy", label: "Privacy Policy" },
+      { href: "/blog", label: "Latest Posts" },
     ],
   },
 ];

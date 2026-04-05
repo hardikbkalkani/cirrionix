@@ -22,7 +22,7 @@ export function NewsletterForm({ dark = true }: NewsletterFormProps) {
       <div className="rounded-[28px] border border-brand-teal/25 bg-white/85 px-6 py-5 text-left text-brand-teal shadow-[0_16px_32px_rgba(93,202,165,0.12)]">
         <p className="font-sans text-2xl font-extrabold text-brand-space">Welcome aboard.</p>
         <p className="mt-2 text-sm leading-6 text-brand-space/65">
-          Your next edition of the Travel Brief will be waiting in your inbox.
+          Thanks for your interest in the Travel Brief. The subscription flow is being finalized and this page will be updated soon.
         </p>
       </div>
     );

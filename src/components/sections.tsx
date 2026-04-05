@@ -116,6 +116,98 @@ export function HomeHero() {
   );
 }
 
+export function HomeSignalSection() {
+  const livePages = [
+    {
+      href: "/visa-guide",
+      label: "Visa Guide",
+      title: "Passport-led planning, not destination guessing.",
+      copy:
+        "Practical country-by-country guidance for Indian travelers with the strongest current signal on entry style, planning difficulty, and travel momentum.",
+    },
+    {
+      href: "/blog",
+      label: "Journal",
+      title: "Editorial travel intelligence built for decisions.",
+      copy:
+        "Long-form posts, visa breakdowns, and strategic travel reads shaped around what Indian travelers actually need before they book.",
+    },
+  ];
+
+  const nextBuilds = [
+    "Digital nomad city playbooks",
+    "Travel insurance comparisons",
+    "Wellness and slow-travel editorial",
+  ];
+
+  return (
+    <section className="bg-transparent pb-24">
+      <div className="container-site">
+        <div className="grid gap-6 lg:grid-cols-[1.15fr,0.85fr]">
+          <div className="rounded-[36px] border border-brand-space/6 bg-white/80 p-7 shadow-[0_24px_70px_rgba(15,23,42,0.08)] md:p-9">
+            <SectionEyebrow>What Is Live</SectionEyebrow>
+            <h2 className="mt-5 max-w-2xl text-4xl font-extrabold tracking-[-0.04em] text-brand-space md:text-5xl">
+              Start with the pages that already carry the strongest signal.
+            </h2>
+            <div className="mt-8 grid gap-5">
+              {livePages.map((page) => (
+                <Link
+                  key={page.href}
+                  href={page.href}
+                  className="rounded-[28px] border border-brand-space/6 bg-[#fffdf8] p-6 transition-transform duration-300 hover:-translate-y-1"
+                >
+                  <p className="text-label-sm uppercase tracking-[0.18em] text-brand-teal-dark">
+                    {page.label}
+                  </p>
+                  <h3 className="mt-3 text-2xl font-bold tracking-[-0.03em] text-brand-space">
+                    {page.title}
+                  </h3>
+                  <p className="mt-3 max-w-xl text-sm leading-7 text-brand-space/60">
+                    {page.copy}
+                  </p>
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          <div className="rounded-[36px] border border-brand-space/6 bg-[radial-gradient(circle_at_top_left,_rgba(122,230,192,0.18),_transparent_42%),linear-gradient(180deg,rgba(255,255,255,0.98),rgba(241,239,232,0.94))] p-7 shadow-[0_24px_70px_rgba(15,23,42,0.08)] md:p-9">
+            <SectionEyebrow>Build Map</SectionEyebrow>
+            <h2 className="mt-5 text-4xl font-extrabold tracking-[-0.04em] text-brand-space">
+              What we build next.
+            </h2>
+            <p className="mt-4 text-base leading-8 text-brand-space/60">
+              Cirrionix is being rebuilt section by section so every route feels intentional instead of half-finished.
+            </p>
+            <div className="mt-8 space-y-4">
+              {nextBuilds.map((item, index) => (
+                <div
+                  key={item}
+                  className="flex items-start gap-4 rounded-[22px] border border-brand-space/6 bg-white/70 px-4 py-4"
+                >
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-teal/15 text-xs font-bold text-brand-teal-dark">
+                    0{index + 1}
+                  </span>
+                  <div>
+                    <p className="text-sm font-semibold uppercase tracking-[0.18em] text-brand-space/45">
+                      Planned Route
+                    </p>
+                    <p className="mt-1 text-base leading-7 text-brand-space">
+                      {item}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <Link href="/newsletter" className="button-primary mt-8 text-label-sm">
+              Follow The Build
+            </Link>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export function ServiceGridSection({
   intro = "Comprehensive travel services designed to take you beyond the ordinary.",
   cards = serviceCards,

@@ -29,8 +29,8 @@ const config: Config = {
         dark:      "#0B0F1A",
       },
       fontFamily: {
-        sans:    ["var(--font-syne)", "system-ui", "sans-serif"],
-        body:    ["var(--font-dm-sans)", "system-ui", "sans-serif"],
+        sans:    ["var(--font-editorial)", "Georgia", "serif"],
+        body:    ["var(--font-editorial)", "Georgia", "serif"],
         mono:    ["var(--font-jetbrains)", "monospace"],
       },
       fontSize: {
