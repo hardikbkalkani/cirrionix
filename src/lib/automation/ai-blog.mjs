@@ -447,10 +447,10 @@ async function fetchExistingPostBySlug(slug) {
   const query = encodeURIComponent(
     `*[_type == "post" && slug.current == $slug][0]{_id, "slug": slug.current}`,
   );
-  const params = encodeURIComponent(JSON.stringify({slug}));
+  const quotedSlug = encodeURIComponent(JSON.stringify(slug));
 
   const response = await fetch(
-    `https://${projectId}.api.sanity.io/v${SANITY_API_VERSION}/data/query/${dataset}?query=${query}&$slug=${encodeURIComponent(slug)}`,
+    `https://${projectId}.api.sanity.io/v${SANITY_API_VERSION}/data/query/${dataset}?query=${query}&$slug=${quotedSlug}`,
     {
       method: "GET",
       headers: {
