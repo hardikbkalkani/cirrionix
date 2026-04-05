@@ -3,6 +3,8 @@ import {defineQuery} from "next-sanity";
 const ARTICLE_PROJECTION = `
   "slug": slug.current,
   "category": coalesce(categories[0]->title, category->title, "Journal"),
+  "imageUrl": mainImage.asset->url,
+  "imageAlt": coalesce(mainImage.alt, title),
   title,
   excerpt,
   readingTime,

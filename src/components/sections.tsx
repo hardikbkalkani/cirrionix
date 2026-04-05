@@ -372,12 +372,21 @@ export function ArticleGrid({ items }: { items: Article[] }) {
       <div className="container-site space-y-8">
         <article className="rounded-[34px] border border-brand-space/6 bg-white/85 p-7 shadow-[0_24px_70px_rgba(15,23,42,0.08)] md:p-10">
           <div className="grid gap-8 md:grid-cols-[0.95fr,1.05fr] md:items-center">
-            <div className="rounded-[30px] bg-[radial-gradient(circle_at_top_left,_rgba(122,230,192,0.22),_transparent_35%),linear-gradient(135deg,#f8fbf7_0%,#eef5ef_35%,#f4efe5_100%)] p-8 text-brand-space">
-              <span className="rounded-full bg-white/80 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-brand-teal-dark">
-                {featured.category}
-              </span>
-              <h2 className="mt-6 text-4xl font-extrabold tracking-[-0.04em]">{featured.title}</h2>
-              <p className="mt-4 max-w-xl text-base leading-8 text-brand-space/62">{featured.excerpt}</p>
+            <div className="overflow-hidden rounded-[30px] bg-[radial-gradient(circle_at_top_left,_rgba(122,230,192,0.22),_transparent_35%),linear-gradient(135deg,#f8fbf7_0%,#eef5ef_35%,#f4efe5_100%)] text-brand-space">
+              {featured.imageUrl ? (
+                <img
+                  src={featured.imageUrl}
+                  alt={featured.imageAlt || featured.title}
+                  className="h-72 w-full object-cover"
+                />
+              ) : null}
+              <div className="p-8">
+                <span className="rounded-full bg-white/80 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-brand-teal-dark">
+                  {featured.category}
+                </span>
+                <h2 className="mt-6 text-4xl font-extrabold tracking-[-0.04em]">{featured.title}</h2>
+                <p className="mt-4 max-w-xl text-base leading-8 text-brand-space/62">{featured.excerpt}</p>
+              </div>
             </div>
             <div>
               <p className="text-label-sm uppercase tracking-[0.18em] text-brand-teal-dark">{featured.publishedAt}</p>
@@ -398,7 +407,15 @@ export function ArticleGrid({ items }: { items: Article[] }) {
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           {rest.map((article) => (
             <article key={article.slug} className="rounded-[28px] border border-brand-space/6 bg-white/80 p-6 text-brand-space shadow-[0_16px_40px_rgba(15,23,42,0.06)]">
-              <div className="rounded-[24px] bg-[radial-gradient(circle_at_top_left,_rgba(122,230,192,0.18),_transparent_35%),linear-gradient(135deg,#f8fbf7_0%,#eef5ef_35%,#f4efe5_100%)] px-5 py-10" />
+              {article.imageUrl ? (
+                <img
+                  src={article.imageUrl}
+                  alt={article.imageAlt || article.title}
+                  className="h-48 w-full rounded-[24px] object-cover"
+                />
+              ) : (
+                <div className="rounded-[24px] bg-[radial-gradient(circle_at_top_left,_rgba(122,230,192,0.18),_transparent_35%),linear-gradient(135deg,#f8fbf7_0%,#eef5ef_35%,#f4efe5_100%)] px-5 py-10" />
+              )}
               <span className={`mt-5 inline-flex rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] ${accentClasses(article.accent)}`}>
                 {article.category}
               </span>
@@ -437,6 +454,15 @@ export function ArticleHero({ article }: { article: Article }) {
             <span>{article.publishedAt}</span>
             <span>{article.readingTime}</span>
           </div>
+          {article.imageUrl ? (
+            <div className="mt-10 overflow-hidden rounded-[30px] border border-brand-space/8 bg-white/70 shadow-[0_18px_50px_rgba(15,23,42,0.08)]">
+              <img
+                src={article.imageUrl}
+                alt={article.imageAlt || article.title}
+                className="h-auto max-h-[540px] w-full object-cover"
+              />
+            </div>
+          ) : null}
         </div>
       </div>
     </section>

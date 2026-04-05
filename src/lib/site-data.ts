@@ -37,6 +37,8 @@ export type CountryCard = {
 export type Article = {
   slug: string;
   category: string;
+  imageUrl?: string;
+  imageAlt?: string;
   title: string;
   excerpt: string;
   readingTime: string;
