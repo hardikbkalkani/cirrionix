@@ -23,7 +23,7 @@ SANITY_API_WRITE_TOKEN=your-sanity-write-token
 UNSPLASH_ACCESS_KEY=your-unsplash-access-key
 AI_AUTOBLOG_TEXT_MODEL=gemini-2.5-flash
 AI_AUTOBLOG_IMAGE_MODEL=gemini-2.5-flash-image
-AI_AUTOBLOG_MODE=draft
+AI_AUTOBLOG_MODE=publish
 AI_AUTOBLOG_ALLOW_TEXT_ONLY=true
 AI_AUTOBLOG_AUTHOR_NAME=Cirrionix AI Desk
 AI_AUTOBLOG_AUTHOR_SLUG=cirrionix-ai-desk
@@ -33,7 +33,7 @@ CRON_SECRET=change-this-secret
 
 ## AI Blog Automation
 
-Generate a draft post manually:
+Generate a post manually:
 
 ```bash
 npm run ai:post -- --topic="Thailand visa guide for Indians in 2026" --category="Visa Guide"
@@ -45,7 +45,7 @@ The script will:
 - fetch a copyright-safe cover image from Unsplash when `UNSPLASH_ACCESS_KEY` is present
 - otherwise generate a copyright-safe AI image with Gemini when image quota is available
 - upload the image to Sanity
-- create a Sanity `post` document as a draft by default
+- create a Sanity `post` document using `AI_AUTOBLOG_MODE`
 
 If Unsplash is not configured and your free Gemini project has no image quota, set `AI_AUTOBLOG_ALLOW_TEXT_ONLY=true` and the script will still create a draft post without a hero image.
 

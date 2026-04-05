@@ -301,7 +301,7 @@ async function generateArticle(topic, category) {
   }
 
   const article = JSON.parse(raw);
-  article.slug = slugify(article.slug || article.title);
+  article.slug = slugify(topic || article.slug || article.title);
   article.categoryName = article.categoryName || chosenCategory;
   article.unsplashQuery =
     article.unsplashQuery || getUnsplashQueryFallback(promptTopic, chosenCategory);
@@ -439,6 +439,35 @@ async function mutateSanity(mutations) {
   return response.json();
 }
 
+async function fetchExistingPostBySlug(slug) {
+  const projectId = requireEnv("NEXT_PUBLIC_SANITY_PROJECT_ID");
+  const dataset = requireEnv("NEXT_PUBLIC_SANITY_DATASET");
+  const token = requireEnv("SANITY_API_WRITE_TOKEN");
+
+  const query = encodeURIComponent(
+    `*[_type == "post" && slug.current == $slug][0]{_id, "slug": slug.current}`,
+  );
+  const params = encodeURIComponent(JSON.stringify({slug}));
+
+  const response = await fetch(
+    `https://${projectId}.api.sanity.io/v${SANITY_API_VERSION}/data/query/${dataset}?query=${query}&$slug=${encodeURIComponent(slug)}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    },
+  );
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Sanity query failed (${response.status}): ${errorText}`);
+  }
+
+  const payload = await response.json();
+  return payload.result || null;
+}
+
 async function ensureAuthor(authorName, authorSlug) {
   const authorId = `author.${slugify(authorSlug)}`;
 
@@ -492,8 +521,9 @@ async function createPostDocument(
   const readingTime = estimateReadingTime(article.sections);
   const documentId =
     mode === "draft" ? `drafts.post.${article.slug}` : `post.${article.slug}`;
+  const draftDocumentId = `drafts.post.${article.slug}`;
 
-  await mutateSanity([
+  const mutations = [
     {
       createOrReplace: {
         _id: documentId,
@@ -532,7 +562,17 @@ async function createPostDocument(
         body: buildPortableTextBlocks(article.sections),
       },
     },
-  ]);
+  ];
+
+  if (mode === "publish") {
+    mutations.push({
+      delete: {
+        id: draftDocumentId,
+      },
+    });
+  }
+
+  await mutateSanity(mutations);
 
   return {documentId, readingTime};
 }
@@ -550,6 +590,14 @@ export async function createAutomatedBlogDraft(options = {}) {
     process.env.AI_AUTOBLOG_ALLOW_TEXT_ONLY === "1";
 
   const article = await generateArticle(options.topic, options.category);
+  const existing = await fetchExistingPostBySlug(article.slug);
+
+  if (existing) {
+    throw new Error(
+      `A post with slug "${article.slug}" already exists. Delete it or change the topic before generating again.`,
+    );
+  }
+
   let imageAssetId = null;
   let imageAlt = article.imageAlt;
 
@@ -593,6 +641,7 @@ export async function createAutomatedBlogDraft(options = {}) {
     mode,
     title: article.title,
     slug: article.slug,
+    publicUrl: `https://www.cirrionix.in/blog/${article.slug}`,
     category: article.categoryName,
     imageAlt,
     hasImage: Boolean(imageAssetId),

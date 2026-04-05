@@ -56,7 +56,12 @@ async function main() {
   const result = await createAutomatedBlogDraft({
     topic,
     category,
-    mode: mode === "publish" ? "publish" : "draft",
+    mode:
+      mode === "publish"
+        ? "publish"
+        : mode === "draft"
+          ? "draft"
+          : undefined,
   });
 
   console.log("AI blog automation completed:");
