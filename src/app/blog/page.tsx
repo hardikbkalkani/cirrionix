@@ -1,7 +1,7 @@
 import { ArticleGrid, BlogListingHero, NewsletterCta } from "@/components/sections";
 import { getBlogArticles } from "@/lib/blog";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 export default async function BlogPage() {
   const articles = await getBlogArticles();
